@@ -1,4 +1,4 @@
-import { userRespository } from "../repository/userRespository.mjs";
+import { UserRespository } from "../user/user.repository.mjs";
 
 export class UserService {
     static async createUser(
@@ -8,7 +8,7 @@ export class UserService {
         fullName,
         dateOfBirth
     ){
-        const user = await userRespository.create({
+        const user = await UserRespository.create({
             username,
             password,
             email,
@@ -18,17 +18,17 @@ export class UserService {
         return user;
     }
 
-    static async getUserById(userId){
-        return await userRespository.findById(userId);
+    static async findUserById(userId){
+        return await UserRespository.findById(userId);
     }
 
     static async userExistsWithGivenEmail(email){
-        const user = await userRespository.findByEmail(email);
+        const user = await UserRespository.findByEmail(email);
         return user !== null;
     }
 
     static async userExistsWithGivenUsername(username){
-        const user = await userRespository.findByUsername(username);
+        const user = await UserRespository.findByUsername(username);
         return user !== null;
     }
 
@@ -39,27 +39,27 @@ export class UserService {
         
     }
     static async deleteAccount(userId){
-        await userRespository.deleteById(userId);
+        await UserRespository.deleteById(userId);
     }
     static async updateUsername(userId, newUsername){
-        await userRespository.updateUsernameById(userId, newUsername);
+        await UserRespository.updateUsernameById(userId, newUsername);
     }
     static async updatePassword(userId, newPassword){
-        await userRespository.updatePasswordById(userId, newPassword);
+        await UserRespository.updatePasswordById(userId, newPassword);
     }
     static async sendFriendRequest(userId, friendId){
-        await userRespository.addFriendRequest(userId, friendId);
+        await UserRespository.addFriendRequest(userId, friendId);
     }
     static async acceptFriendRequest(fromUserId, toUserId){
-        await userRespository.acceptFriendRequest(fromUserId, toUserId);
+        await UserRespository.acceptFriendRequest(fromUserId, toUserId);
     }
     static async blockUser(userId, blockedUserId){
-        await userRespository.blockUserById(userId, blockedUserId);
+        await UserRespository.blockUserById(userId, blockedUserId);
     } 
     static async unfriendUser(userId, friendId){
-        await userRespository.deleleFromFriendsById(userId, friendId);  
+        await UserRespository.deleleFromFriendsById(userId, friendId);  
     }
     static async rejectFriendRequest(fromUserId, toUserId){
-        await userRespository.rejectFriendRequest(fromUserId, toUserId);
+        await UserRespository.rejectFriendRequest(fromUserId, toUserId);
     }
 }

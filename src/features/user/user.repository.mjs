@@ -1,6 +1,6 @@
-import { User } from "../model/userModel.mjs"
+import { User } from "../user/user.model.mjs";
 
-export const userRespository = {
+export const UserRespository = {
     create: async (userData) => {
         return await User.create({
             username: userData.username,

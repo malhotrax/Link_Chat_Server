@@ -1,8 +1,8 @@
-import { ApiError } from "../util/apiError.mjs";
-import { ApiResponse } from "../util/apiResponse.mjs";
-import { asyncHandler } from "../util/asyncHandler.mjs"
-import { UserService } from "../service/userService.mjs";
-import { Validator } from "../util/validator.mjs";
+import { ApiError } from "../../util/apiError.mjs";
+import { ApiResponse } from "../../util/apiResponse.mjs";
+import { asyncHandler } from "../../util/asyncHandler.mjs";
+import { UserService } from "./user.service.mjs";
+import { Validator } from "../../util/validator.mjs"
 
 export const UserController = {
     createUser: asyncHandler(async (req, res) => {
@@ -52,6 +52,9 @@ export const UserController = {
     }),
 
     userWithGivenEmailExists: asyncHandler(async (req, res) => {
+        if (!req.body) {
+            throw new ApiError(400, "Request body is missing.");
+        }
         const { email } = req.body;
         const userExists = await UserService.userExistsWithGivenEmail(email);
         if (!userExists) {
@@ -63,6 +66,9 @@ export const UserController = {
     }),
 
     userWithGivenUsernameExists: asyncHandler(async (req, res) => {
+        if (!req.body) {
+            throw new ApiError(400, "Request body is missing.");
+        }
         const { username } = req.body;
         const userExists = await UserService.userExistsWithGivenUsername(username);
         if (!userExists) {
@@ -74,15 +80,6 @@ export const UserController = {
     }),
 
     login: asyncHandler(async (req, res) =>  {
-
-    }),
-
-    sendFriendRequest:  asyncHandler(async (userId, fiendId, socket) => {
-    
-        
-    }),
-
-    acceptFriendRequest:  asyncHandler(async (req, res) => {
 
     }),
 

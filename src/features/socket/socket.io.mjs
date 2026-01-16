@@ -1,9 +1,7 @@
 import { Server } from "socket.io";
 import app from "../server/app.mjs"
 import http from "http";
-import { UserService } from "../service/userService.mjs";
-import { asyncHandler } from "../util/asyncHandler.mjs";
-import { UserController } from "../controller/userController.mjs";
+import { SocketController } from "./socket.controller.mjs";
 
 const server = http.createServer(app);
 const io = new Server(server);
@@ -19,14 +17,11 @@ io.on("connection", socket => {
     });
 
     socket.on("send_friend_request", (userId) => {
-        const friend = UserService.getUserById(userId);
-        if(!friend){
-            socket.emit("user_not_found", { message: "User not found." });
-        }
-        UserController.sendFriendRequest(user._id, friend._id, socket)
+        SocketController.sendFriendRequest(socket.user._id, userId, socket);
     });
 
     socket.on("accept_friend_request", (userId) => {    
+        SocketController.acceptFriendRequest(socket.user._id, userId, socket);
     });
 
     socket.on("send_message", (chatId,content, ) => {
