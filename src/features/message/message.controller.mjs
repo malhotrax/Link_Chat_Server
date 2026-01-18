@@ -1,10 +1,9 @@
-import { ChatService } from "../chat/chat.service.mjs";
-import { MessageService} from "./message.service.mjs"
-import { UserService } from "../user/user.service.mjs";
+import { asyncHandler } from "../../util/asyncHandler.mjs";
 
 export const MessageController = {
+	getMessage: asyncHandler(async (request, response) => {}),
 
-    
+	getMessages: asyncHandler(async (request, response) => {}),
 
-}
-
+	deleteMessage: asyncHandler(async (request, response) => {}),
+};

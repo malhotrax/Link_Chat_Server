@@ -38,4 +38,8 @@ export class ChatService {
         await ChatRepository.addMessage(chatId,message)
     }
 
+    static async delieverMessage(message,socket) {
+        
+    }
+
 }
