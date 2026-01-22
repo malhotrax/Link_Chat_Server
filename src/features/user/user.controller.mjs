@@ -32,9 +32,7 @@ export const UserController = {
 			validationErrors.push("Invalid email format.");
 		}
 		if (validationErrors.length > 0) {
-			throw new ApiError(400, "Validation Error", {
-				errors: validationErrors,
-			});
+			throw new ApiError(400, "Validation Error : " + validationErrors);
 		}
 
 		const userWithGivenEmailExists =
@@ -72,16 +70,17 @@ export const UserController = {
 			email: userObj.email,
 			fullName: userObj.fullName,
 			username: userObj.username,
+			userId: userObj._id,
 		};
 		return response
 			.status(200)
-			.cookie("access_token", accessToken, options)
-			.cookie("refresh_token", refreshToken, options)
+			.cookie("accessToken", accessToken, options)
+			.cookie("refreshToken", refreshToken, options)
 			.json(
 				new ApiResponse("Logged in successfully.", {
-					refresh_token: refreshToken,
-					access_token: accessToken,
-					userData,
+					refreshToken: refreshToken,
+					accessToken: accessToken,
+					user: userData,
 				}),
 			);
 	}),
@@ -168,6 +167,38 @@ export const UserController = {
 				}),
 			);
 	}),
+
+	usernameAvailable: asyncHandler(async (request, response) => {
+		if (!request.body) {
+			throw new ApiError(400, "Request body is missing.");
+		}
+		const { username } = request.body;
+		const userExists =
+			await UserService.userExistsWithGivenUsername(username);
+		if (userExists) {
+			throw new ApiError(409, "Username already exists.");
+		}
+		return response.status(200).json(
+			new ApiResponse("Username available", {
+				usernameAvailable: true,
+			}),
+		);
+	}),
+
+	emailAvailable: asyncHandler(async (request, response) => {
+		if (!request.body) {
+			throw new ApiError(400, "Request body is missing.");
+		}
+		const { email } = request.body;
+		const userExists = await UserService.userExistsWithGivenEmail(email);
+		if (userExists) {
+			throw new ApiError(409, "Email already exists.");
+		}
+		return response
+			.status(200)
+			.json(new ApiResponse("Email available", { emailAvailable: true }));
+	}),
+
 	refreshAccessToken: asyncHandler(async (request, response) => {}),
 
 	blockUser: asyncHandler(async (request, response) => {}),
