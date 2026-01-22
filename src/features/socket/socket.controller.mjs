@@ -2,14 +2,20 @@ import { UserService } from "../user/user.service.mjs";
 import { ChatService } from "../chat/chat.service.mjs";
 import { MessageService } from "../message/message.service.mjs";
 import { MessageDeliveryStatus } from "../../util/deliveryStatus.mjs";
+import { ONLINE_USERS } from "./socket.io.mjs";
 
 export const SocketController = {
-	userConnected: async (userId, socket) => {
-		global.onlineUsers.set(userId, socket.id);
+	userConnected: async (socket) => {
+		const userId = socket.user._id;
+		ONLINE_USERS.set(userId, socket.id);
 		const messages = await MessageService.findUndeliveredMessages(userId);
-		if (messages || messages.length > 0) {
+		if (messages.length > 0) {
 			socket.emit("undelivered_messages", messages);
 		}
+		return;
+	},
+	userDisconnected: async (socket) => {
+		ONLINE_USERS.delete(socket.user._id);
 		return;
 	},
 	sendFriendRequest: async (fromUserId, toUserId, socket) => {

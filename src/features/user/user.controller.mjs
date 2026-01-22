@@ -78,7 +78,7 @@ export const UserController = {
 			.cookie("access_token", accessToken, options)
 			.cookie("refresh_token", refreshToken, options)
 			.json(
-				new ApiResponse(200, "Logged in successfully.", {
+				new ApiResponse("Logged in successfully.", {
 					refresh_token: refreshToken,
 					access_token: accessToken,
 					userData,
@@ -97,7 +97,7 @@ export const UserController = {
 		}
 		return response
 			.status(200)
-			.json(new ApiResponse(200, "User exists", { exists: userExists }));
+			.json(new ApiResponse("User exists", { exists: userExists }));
 	}),
 
 	userWithGivenUsernameExists: asyncHandler(async (request, response) => {
@@ -112,7 +112,7 @@ export const UserController = {
 		}
 		return response
 			.status(200)
-			.json(new ApiResponse(200, "User exists", { exists: userExists }));
+			.json(new ApiResponse("User exists", { exists: userExists }));
 	}),
 
 	login: asyncHandler(async (request, response) => {
@@ -154,16 +154,17 @@ export const UserController = {
 			email: userObj.email,
 			fullName: userObj.fullName,
 			username: userObj.username,
+			userId: userObj._id,
 		};
 		return response
 			.status(200)
 			.cookie("access_token", accessToken, options)
 			.cookie("refresh_token", refreshToken, options)
 			.json(
-				new ApiResponse(200, "Logged in successfully.", {
-					refresh_token: refreshToken,
-					access_token: accessToken,
-					userData,
+				new ApiResponse("Logged in successfully.", {
+					refreshToken: refreshToken,
+					accessToken: accessToken,
+					user: userData,
 				}),
 			);
 	}),

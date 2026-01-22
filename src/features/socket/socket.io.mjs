@@ -2,14 +2,16 @@ import { Server } from "socket.io";
 import app from "../../app.mjs";
 import http from "http";
 import { SocketController } from "./socket.controller.mjs";
+import { socketAuth } from "../../middleware/socket.auth.mjs";
 
 const server = http.createServer(app);
 const io = new Server(server);
 
-global.onlineUsers = new Map();
+export const ONLINE_USERS = new Map();
+
+io.use(socketAuth);
 
 io.on("connection", (socket) => {
-	const user = socket.user;
 	console.log("New client connected:", socket.id);
 
 	socket.on("user_connected", (userId) => {
@@ -29,7 +31,7 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("disconnect", () => {
-		console.log("Client disconnected:", socket.id);
+		SocketController.userDisconnected(socket);
 	});
 });
 
